@@ -12,52 +12,31 @@
         <img class="banner__img" src="@/assets/images/banner.jpg" />
       </div>
       <div class="icons">
-        <div class="icons__item">
-          <img class="icons__item__img" src="@/assets/images/超市.png" />
-          <p class="icons__item__desc">超市便利</p>
-        </div>
-        <div class="icons__item">
-          <img class="icons__item__img" src="@/assets/images/超市.png" />
-          <p class="icons__item__desc">超市便利</p>
-        </div>
-        <div class="icons__item">
-          <img class="icons__item__img" src="@/assets/images/超市.png" />
-          <p class="icons__item__desc">超市便利</p>
-        </div>
-        <div class="icons__item">
-          <img class="icons__item__img" src="@/assets/images/超市.png" />
-          <p class="icons__item__desc">超市便利</p>
-        </div>
-        <div class="icons__item">
-          <img class="icons__item__img" src="@/assets/images/超市.png" />
-          <p class="icons__item__desc">超市便利</p>
-        </div>
-        <div class="icons__item">
-          <img class="icons__item__img" src="@/assets/images/超市.png" />
-          <p class="icons__item__desc">超市便利</p>
-        </div>
-        <div class="icons__item">
-          <img class="icons__item__img" src="@/assets/images/超市.png" />
-          <p class="icons__item__desc">超市便利</p>
-        </div>
-        <div class="icons__item">
-          <img class="icons__item__img" src="@/assets/images/超市.png" />
-          <p class="icons__item__desc">超市便利</p>
-        </div>
-        <div class="icons__item">
-          <img class="icons__item__img" src="@/assets/images/超市.png" />
-          <p class="icons__item__desc">超市便利</p>
-        </div>
-        <div class="icons__item">
-          <img class="icons__item__img" src="@/assets/images/超市.png" />
-          <p class="icons__item__desc">超市便利</p>
+        <div class="icons__item" v-for="(item,index) in iconsList" :key="index">
+          <img class="icons__item__img" :src="item.imgSrc" />
+          <p class="icons__item__desc">{{ item.desc }}</p>
         </div>
       </div>
       <div class="gap"></div>
 </template>
 <script>
 export default {
-  name: 'StaticPart'
+  name: 'StaticPart',
+  setup () {
+    const iconsList = [
+      { imgSrc: require('@/assets/images/超市.png'), desc: '超市便利' },
+      { imgSrc: require('@/assets/images/菜市场.png'), desc: '菜市场' },
+      { imgSrc: require('@/assets/images/水果店.png'), desc: '水果店' },
+      { imgSrc: require('@/assets/images/鲜花.png'), desc: '鲜花绿植' },
+      { imgSrc: require('@/assets/images/医药健康.png'), desc: '医药健康' },
+      { imgSrc: require('@/assets/images/家居.png'), desc: '家居时尚' },
+      { imgSrc: require('@/assets/images/蛋糕.png'), desc: '烘焙蛋糕' },
+      { imgSrc: require('@/assets/images/签到.png'), desc: '签到' },
+      { imgSrc: require('@/assets/images/大牌免运.png'), desc: '大牌免运' },
+      { imgSrc: require('@/assets/images/红包.png'), desc: '医药健康' }
+    ]
+    return { iconsList }
+  }
 }
 </script>
 <style lang="scss" scoped>
