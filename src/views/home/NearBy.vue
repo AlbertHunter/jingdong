@@ -1,7 +1,12 @@
 <template>
       <div class="nearby">
         <h3 class="nearby__title">附近店铺</h3>
-        <div class="nearby__item" v-for="item in nearbyList" :key="item.id">
+        <ShopInfo
+          v-for="item in nearbyList"
+          :key="item.id"
+          :item = "item"
+        />
+<!--         <div class="nearby__item" v-for="item in nearbyList" :key="item.id">
           <img :src="item.imgUrl" class="nearby__item__img"/>
           <div class="nearby__content">
             <div class="nearby__content__title">{{ item.name }}</div>
@@ -12,12 +17,14 @@
             </div>
             <p class="nearby__content__highlight">{{item.slogan}}</p>
           </div>
-        </div>
+        </div> -->
       </div>
 </template>
 <script>
 import { ref } from 'vue'
 import { get } from '../../utils/request'
+import ShopInfo from '../../components/ShopInfo'
+
 const useNearbyListEffect = () => {
   const nearbyList = ref([])
   const getNearByList = async () => {
@@ -30,6 +37,7 @@ const useNearbyListEffect = () => {
 }
 export default {
   name: 'NearBy',
+  components: { ShopInfo },
   setup () {
     const { nearbyList, getNearByList } = useNearbyListEffect()
     getNearByList()
