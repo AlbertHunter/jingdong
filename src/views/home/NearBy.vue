@@ -1,11 +1,13 @@
 <template>
       <div class="nearby">
         <h3 class="nearby__title">附近店铺</h3>
-        <ShopInfo
+        <router-link
           v-for="item in nearbyList"
           :key="item.id"
-          :item = "item"
-        />
+          :to = "`/shop/${item.id}`"
+        >
+          <ShopInfo :item = "item" />
+      </router-link>
 <!--         <div class="nearby__item" v-for="item in nearbyList" :key="item.id">
           <img :src="item.imgUrl" class="nearby__item__img"/>
           <div class="nearby__content">
@@ -48,48 +50,14 @@ export default {
 <style lang="scss" scoped>
 @import '@/style/viriables.scss';
 .nearby {
-&__title {
-    margin: .16rem 0 .02rem 0;
-    font-size: .18rem;
-    font-weight: normal;
-    color:$content-font-color;
-}
-&__item {
-    display: flex;
-    padding-top:.12rem;
-    &__img {
-    margin-right: .16rem;
-    width: .56rem;
-    height:.56rem;
-    }
-    &:last-child .nearby__content {
-    border-bottom: none;
-    }
-}
-&__content {
-    flex:1;
-    padding-bottom: .12rem;
-    border-bottom: 1px solid $content-bg-color;
-    &__title {
-    line-height: .22rem;
-    font-size: .16rem;
-    color:$content-font-color;
-    }
-    &__tags {
-    margin-top: .08rem;
-    line-height: .18rem;
-    font-size:.13rem;
-    color: $content-font-color;
-    }
-    &__tag {
-    margin-right:.16rem;
-    }
-    &__highlight {
-    margin-top: .08rem;
-    line-height: .18rem;
-    font-size: .13rem;
-    color:#e93b3b;
-    }
-}
+  &__title {
+      margin: .16rem 0 .02rem 0;
+      font-size: .18rem;
+      font-weight: normal;
+      color:$content-font-color;
+  }
+  a {
+    text-decoration: none;
+  }
 }
 </style>
