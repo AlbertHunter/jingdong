@@ -35,6 +35,7 @@ const useShopInfoEffect = () => {
       data2.value = result.data
     }
   }
+  getItemData()
   const { item } = toRefs(data)
   return { item, data2, getItemData }
 }
@@ -50,9 +51,8 @@ export default {
   name: 'Shop',
   components: { ShopInfo, Content },
   setup () {
-    const { item, data2, getItemData } = useShopInfoEffect()
+    const { item, data2 } = useShopInfoEffect()
     const handleBackClick = useBackRouterEffect()
-    getItemData()
     return { item, data2, handleBackClick }
   }
 }
