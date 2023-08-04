@@ -15,6 +15,7 @@
       </div>
       <ShopInfo :item="data2" :hideBorder = "true" v-show="item.imgUrl"/>
       <Content />
+      <cart-footer></cart-footer>
     </div>
 </template>
 
@@ -24,6 +25,8 @@ import { useRouter, useRoute } from 'vue-router'
 import { get } from '@/utils/request'
 import ShopInfo from '../../components/ShopInfo'
 import Content from './Content.vue'
+import CartFooter from '@/views/shop/CartFooter'
+
 const useShopInfoEffect = () => {
   const route = useRoute()
   const data = reactive({ item: {} })
@@ -49,7 +52,7 @@ const useBackRouterEffect = () => {
 
 export default {
   name: 'Shop',
-  components: { ShopInfo, Content },
+  components: { ShopInfo, Content, CartFooter },
   setup () {
     const { item, data2 } = useShopInfoEffect()
     const handleBackClick = useBackRouterEffect()
