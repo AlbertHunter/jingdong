@@ -17,9 +17,9 @@
                     </p>
                 </div>
                 <div class="product__number">
-                    <span class="product__number__minus">-</span>
-                    0
-                    <span class="product__number__plus">+</span>
+                    <span class="product__number__minus" @click="()=>{changeItemToCart(shopId, item._id, item, -1)}">-</span>
+                  {{cartList?.[shopId]?.[item._id]?.count || 0}}
+                    <span class="product__number__plus" @click="()=>{changeItemToCart(shopId, item._id, item, 1)}">+</span>
                 </div>
             </div>
         </div>
@@ -29,6 +29,7 @@
 <script>
 import { reactive, ref, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
+import { useStore } from 'vuex'
 import { get } from '@/utils/request'
 
 const useCurrentList = () => {
@@ -79,14 +80,27 @@ const useCurrentList = () => {
 
   return { categories, currentTab, productList, handleCategoryClick }
 }
+const useCartEffect = () => {
+  const store = useStore()
+  const cartList = store.state.cartList
+  const changeItemToCart = (shopId, productId, productInfo, num) => {
+    store.commit('addItemToCart', {
+      shopId, productId, productInfo, num
+    })
+  }
+  return { cartList, changeItemToCart }
+}
 export default {
   name: 'Content',
   setup: () => {
     const { productList, currentTab, categories, handleCategoryClick } = useCurrentList()
+    const { cartList, changeItemToCart } = useCartEffect()
     return {
       categories,
       currentTab,
       productList,
+      cartList,
+      changeItemToCart,
       handleCategoryClick,
       test: 'sss'
     }
