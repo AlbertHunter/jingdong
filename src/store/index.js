@@ -4,7 +4,7 @@ export default createStore({
   state: {
     cartList: {
       // 第一层级是商铺的 id
-      1: {
+      99: {
         // 第二层是商品内容及购物数量
         111: {
           _id: '1',
@@ -25,21 +25,25 @@ export default createStore({
     }
   },
   mutations: {
-    addItemToCart (state, payload) {
-      const { shopId, productId, productInfo } = payload
+    changeItemToCart (state, payload) {
+      const { shopId, productId, productInfo, num } = payload
       let shopInfo = state.cartList[shopId]
       if (!shopInfo) shopInfo = {}
       let product = shopInfo[productId]
       if (!product) {
         product = productInfo
         product.count = 0
+        shopInfo[productId] = product
       }
-      product.count += 1
-      shopInfo[productId] = product
+      const count = (product.count + num > 0) ? product.count + num : 0
+      shopInfo[productId].count = count
       state.cartList[shopId] = shopInfo
     }
   },
   actions: {
+    changeItemToCart ({ commit }, data) {
+      commit('changeItemToCart', data)
+    }
   },
   modules: {
   }

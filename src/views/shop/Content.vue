@@ -17,9 +17,9 @@
                     </p>
                 </div>
                 <div class="product__number">
-                    <span class="product__number__minus" @click="()=>{changeItemToCart(shopId, item._id, item, -1)}">-</span>
-                  {{cartList?.[shopId]?.[item._id]?.count || 0}}
-                    <span class="product__number__plus" @click="()=>{changeItemToCart(shopId, item._id, item, 1)}">+</span>
+                    <span class="product__number__minus" @click="()=>{changeItemToCart(shopId, item.id, item, -1)}">-</span>
+                  {{cartList?.[shopId]?.[item.id]?.count || 0}}
+                    <span class="product__number__plus" @click="()=>{changeItemToCart(shopId, item.id, item, 1)}">+</span>
                 </div>
             </div>
         </div>
@@ -34,6 +34,7 @@ import { get } from '@/utils/request'
 
 const useCurrentList = () => {
   const route = useRoute()
+  const shopId = route.params.id
   const productList = ref({})
   const productObj = reactive({ list: {} })
   const categories = [
@@ -56,7 +57,6 @@ const useCurrentList = () => {
    * @returns {Promise<void>}
    */
   const getProducts = async (tab) => {
-    const shopId = route.params.id
     const result = await get(`/api/shop/${shopId}/products?tab=${tab}`)
     if (result?.code === 200 && result?.data) {
       const data = result.data
@@ -78,13 +78,13 @@ const useCurrentList = () => {
     getProducts(currentTab.value)
   })
 
-  return { categories, currentTab, productList, handleCategoryClick }
+  return { categories, shopId, currentTab, productList, handleCategoryClick }
 }
 const useCartEffect = () => {
   const store = useStore()
   const cartList = store.state.cartList
   const changeItemToCart = (shopId, productId, productInfo, num) => {
-    store.commit('addItemToCart', {
+    store.dispatch('changeItemToCart', {
       shopId, productId, productInfo, num
     })
   }
@@ -93,12 +93,13 @@ const useCartEffect = () => {
 export default {
   name: 'Content',
   setup: () => {
-    const { productList, currentTab, categories, handleCategoryClick } = useCurrentList()
+    const { productList, shopId, currentTab, categories, handleCategoryClick } = useCurrentList()
     const { cartList, changeItemToCart } = useCartEffect()
     return {
       categories,
       currentTab,
       productList,
+      shopId,
       cartList,
       changeItemToCart,
       handleCategoryClick,
