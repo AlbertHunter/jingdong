@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import { reactive, ref, watchEffect } from 'vue'
+import { computed, reactive, ref, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { get } from '@/utils/request'
@@ -70,10 +70,6 @@ const useCurrentList = () => {
   const handleCategoryClick = (item) => {
     currentTab.value = item.tab
   }
-
-  console.log(productList)
-  console.log(productObj)
-
   watchEffect(() => {
     getProducts(currentTab.value)
   })
@@ -82,7 +78,9 @@ const useCurrentList = () => {
 }
 const useCartEffect = () => {
   const store = useStore()
-  const cartList = store.state.cartList
+  const cartList = computed(() => {
+    return store.state.cartList || {}
+  })
   const changeItemToCart = (shopId, productId, productInfo, num) => {
     store.dispatch('changeItemToCart', {
       shopId, productId, productInfo, num

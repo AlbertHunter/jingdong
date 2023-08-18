@@ -4,7 +4,7 @@
     <div class="product" v-if="showCart">
       <div class="product__header">
         <div class="product__header__all">
-          <span/>全选
+          <span class="product__header__icon iconfont">&#xe602;</span>全选
         </div>
         <div class="product__header__clear">
           <span>清空购物车</span>
@@ -12,6 +12,11 @@
       </div>
       <template v-for="item in productList">
         <div class="product__item" v-if="item.count > 0" :key="item.id">
+          <div class="product__item__check  iconfont"
+               :class= "item.checked ? 'product__item__check' : ''"
+              v-html="item.checked ? '&#xe606;' : '&#xe602;'"
+              @click="changeCartItemChecked(shopId, item.id)"
+          />
           <img class="product__item__img" :src="item.imgUrl" />
           <div class="product__item__detail">
             <h4 class="product__item__title">{{ item.name }}</h4>
@@ -56,10 +61,11 @@ const useCurrentCart = () => {
   const route = useRoute()
   const shopId = route.params.id
   const store = useStore()
-  const cartList = store.state.cartList
+  const cartList = store.state.cartList || {}
   const showCart = ref(false)
 
   const total = computed(() => {
+    if (typeof cartList[shopId] === 'undefined') return 0
     const cartShop = cartList[shopId]
     let count = 0
     if (cartShop) {
@@ -90,10 +96,12 @@ const useCurrentCart = () => {
     })
   }
   const handleCartShowChange = (total) => {
-    console.log(productList)
     if (total > 0) {
       showCart.value = !showCart.value
     }
+  }
+  const changeCartItemChecked = (shopId, productId) => {
+    store.dispatch('changeCartItemChecked', { shopId, productId })
   }
   return {
     total,
@@ -102,6 +110,7 @@ const useCurrentCart = () => {
     productList,
     showCart,
     changeItemToCart,
+    changeCartItemChecked,
     handleCartShowChange
   }
 }
@@ -155,7 +164,7 @@ export default {
     }
     &__icon {
       color: $medium-fontColor;
-      font-size: .2rem;
+      font-size: .21rem;
       margin-right: .08rem;
     }
     &__icon--active {

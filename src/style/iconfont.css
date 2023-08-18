@@ -1,8 +1,9 @@
+/* 在线链接服务仅供平台体验和调试使用，平台不承诺服务的稳定性，企业客户需下载字体包自行发布使用并做好备份。 */
 @font-face {
   font-family: 'iconfont';  /* Project id 3699575 */
-  src: url('//at.alicdn.com/t/c/font_3699575_p3o2o0t4pd.woff2?t=1675954726236') format('woff2'),
-       url('//at.alicdn.com/t/c/font_3699575_p3o2o0t4pd.woff?t=1675954726236') format('woff'),
-       url('//at.alicdn.com/t/c/font_3699575_p3o2o0t4pd.ttf?t=1675954726236') format('truetype');
+  src: url('//at.alicdn.com/t/c/font_3699575_lhuk592gx8p.woff2?t=1692323336446') format('woff2'),
+  url('//at.alicdn.com/t/c/font_3699575_lhuk592gx8p.woff?t=1692323336446') format('woff'),
+  url('//at.alicdn.com/t/c/font_3699575_lhuk592gx8p.ttf?t=1692323336446') format('truetype');
 }
   .iconfont {
     font-family: "iconfont" !important;
