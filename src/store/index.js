@@ -57,18 +57,35 @@ export default createStore({
         product = shopInfo[productId]
       }
       const count = (product.count + num > 0) ? product.count + num : 0
+      if (num > 0) product.checked = true
       shopInfo[productId].count = count
       state.cartList[shopId] = shopInfo
       setLocalStorage(state)
     },
     changeCartItemChecked (state, payload) {
       const { shopId, productId } = payload
-      console.log(payload, state.cartList)
-      console.log(shopId, productId)
       const product = state.cartList[shopId][productId]
       product.checked = !product.checked
       state.cartList[shopId][productId] = product
-      console.log(state.cartList)
+      setLocalStorage(state)
+    },
+    setCartAllItemsChecked (state, payload) {
+      const { shopId } = payload
+      const products = Object.values(state.cartList[shopId] || {})
+      if (products.some((p) => p.checked === false)) {
+        products.forEach((p) => {
+          p.checked = true
+        })
+      } else {
+        products.forEach((p) => {
+          p.checked = false
+        })
+      }
+      setLocalStorage(state)
+    },
+    emptyCartProducts (state, payload) {
+      const { shopId } = payload
+      state.cartList[shopId] = {}
       setLocalStorage(state)
     }
   },
@@ -78,6 +95,12 @@ export default createStore({
     },
     changeCartItemChecked ({ commit }, data) {
       commit('changeCartItemChecked', data)
+    },
+    setCartAllItemsChecked ({ commit }, data) {
+      commit('setCartAllItemsChecked', data)
+    },
+    emptyCartProducts ({ commit }, data) {
+      commit('emptyCartProducts', data)
     }
   },
   modules: {

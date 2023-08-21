@@ -4,16 +4,23 @@
     <div class="product" v-if="showCart">
       <div class="product__header">
         <div class="product__header__all">
-          <span class="product__header__icon iconfont">&#xe602;</span>全选
+          <span class="product__header__icon iconfont"
+            :class= "allChecked ? 'product__header__icon--active' : ''"
+            v-html="allChecked ? '&#xe606;' : '&#xe602;'"
+            @click="setCartAllItemsChecked(shopId)"
+          ></span>全选
         </div>
         <div class="product__header__clear">
-          <span>清空购物车</span>
+          <span
+            class="product__header__clear__btn"
+            @click="emptyCartProducts(shopId)"
+          >清空购物车</span>
         </div>
       </div>
       <template v-for="item in productList">
         <div class="product__item" v-if="item.count > 0" :key="item.id">
           <div class="product__item__check  iconfont"
-               :class= "item.checked ? 'product__item__check' : ''"
+               :class= "item.checked ? 'product__item__check--active' : ''"
               v-html="item.checked ? '&#xe606;' : '&#xe602;'"
               @click="changeCartItemChecked(shopId, item.id)"
           />
@@ -74,6 +81,7 @@ const useCurrentCart = () => {
         count += product.count
       }
     }
+    if (count === 0) showCart.value = false
     return count
   })
   const price = computed(() => {
@@ -82,10 +90,16 @@ const useCurrentCart = () => {
     if (cartShop) {
       for (const i in cartShop) {
         const product = cartShop[i]
-        res += product.count * product.price
+        if (product.checked) {
+          res += product.count * product.price
+        }
       }
     }
     return res.toFixed(2)
+  })
+  const allChecked = computed(() => {
+    const products = Object.values(cartList[shopId] || {})
+    return products.filter(p => p.count > 0).every((p) => p.checked)
   })
   const productList = computed(() => {
     return cartList[shopId] || {}
@@ -103,15 +117,24 @@ const useCurrentCart = () => {
   const changeCartItemChecked = (shopId, productId) => {
     store.dispatch('changeCartItemChecked', { shopId, productId })
   }
+  const setCartAllItemsChecked = (shopId) => {
+    store.dispatch('setCartAllItemsChecked', { shopId })
+  }
+  const emptyCartProducts = (shopId) => {
+    store.dispatch('emptyCartProducts', { shopId })
+  }
   return {
     total,
     price,
+    allChecked,
     shopId,
     productList,
     showCart,
     changeItemToCart,
     changeCartItemChecked,
-    handleCartShowChange
+    handleCartShowChange,
+    setCartAllItemsChecked,
+    emptyCartProducts
   }
 }
 
