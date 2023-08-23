@@ -1,6 +1,6 @@
 <template>
     <div class="docker">
-      <span v-for="(item,index) in dockerList" :key="index" :class="{'docker__item': true, 'docker__item--active': index ===0}">
+      <span v-for="(item,index) in dockerList" :key="index" :class="{'docker__item': true, 'docker__item--active': route.name === item.to.name}">
       <router-link :to="item.to">
         <div class="iconfont" v-html = "item.icon" />
         <div class="docker__title">{{ item.text }}</div>
@@ -9,16 +9,18 @@
     </div>
 </template>
 <script>
+import { useRoute } from 'vue-router'
 export default {
   name: 'Docker',
   setup () {
+    const route = useRoute()
     const dockerList = [
       { icon: '&#xe68d;', text: '首页', to: { name: 'Home' } },
       { icon: '&#xe67a;', text: '购物车', to: { name: 'CartList' } },
       { icon: '&#xe63e;', text: '订单', to: { name: 'OrderList' } },
       { icon: '&#xe65f;', text: '我的', to: { name: 'Profile' } }
     ]
-    return { dockerList }
+    return { dockerList, route }
   }
 }
 </script>

@@ -17,9 +17,9 @@
                     </p>
                 </div>
                 <div class="product__number">
-                    <span class="product__number__minus" @click="()=>{changeItemToCart(shopId, item.id, item, -1)}">-</span>
-                  {{cartList?.[shopId]?.[item.id]?.count || 0}}
-                    <span class="product__number__plus" @click="()=>{changeItemToCart(shopId, item.id, item, 1)}">+</span>
+                    <span class="product__number__minus" @click="()=>{changeItemToCart(shopId, item.id, item, -1, shopName)}">-</span>
+                  {{cartList?.[shopId]?.productList[item.id]?.count || 0}}
+                    <span class="product__number__plus" @click="()=>{changeItemToCart(shopId, item.id, item, 1, shopName)}">+</span>
                 </div>
             </div>
         </div>
@@ -81,15 +81,16 @@ const useCartEffect = () => {
   const cartList = computed(() => {
     return store.state.cartList || {}
   })
-  const changeItemToCart = (shopId, productId, productInfo, num) => {
+  const changeItemToCart = (shopId, productId, productInfo, num, shopName) => {
     store.dispatch('changeItemToCart', {
-      shopId, productId, productInfo, num
+      shopId, productId, productInfo, num, shopName
     })
   }
   return { cartList, changeItemToCart }
 }
 export default {
   name: 'Content',
+  props: ['shopName'],
   setup: () => {
     const { productList, shopId, currentTab, categories, handleCategoryClick } = useCurrentList()
     const { cartList, changeItemToCart } = useCartEffect()

@@ -54,7 +54,12 @@
       <div class="check__info">
         总计：<span class="check__info__price">&yen;{{ price }}</span>
       </div>
-      <div class="check__btn">去结算</div>
+      <router-link
+        :to="{name: 'OrderConfirmation', params: {id: shopId}}"
+        v-show="showSubmitBtn"
+      >
+        <div class="check__btn">去结算</div>
+      </router-link>
     </div>
   </div>
 </template>
@@ -73,7 +78,7 @@ const useCurrentCart = () => {
 
   const total = computed(() => {
     if (typeof cartList[shopId] === 'undefined') return 0
-    const cartShop = cartList[shopId]
+    const cartShop = cartList[shopId].productList
     let count = 0
     if (cartShop) {
       for (const i in cartShop) {
@@ -85,11 +90,11 @@ const useCurrentCart = () => {
     return count
   })
   const price = computed(() => {
-    const cartShop = cartList[shopId]
+    const { productList } = cartList[shopId] || {}
     let res = 0
-    if (cartShop) {
-      for (const i in cartShop) {
-        const product = cartShop[i]
+    if (productList) {
+      for (const i in productList) {
+        const product = productList[i]
         if (product.checked) {
           res += product.count * product.price
         }
@@ -98,11 +103,11 @@ const useCurrentCart = () => {
     return res.toFixed(2)
   })
   const allChecked = computed(() => {
-    const products = Object.values(cartList[shopId] || {})
+    const products = Object.values(cartList[shopId].productList || {})
     return products.filter(p => p.count > 0).every((p) => p.checked)
   })
   const productList = computed(() => {
-    return cartList[shopId] || {}
+    return cartList[shopId].productList || {}
   })
   const changeItemToCart = (shopId, productId, productInfo, num) => {
     store.dispatch('changeItemToCart', {
@@ -123,6 +128,17 @@ const useCurrentCart = () => {
   const emptyCartProducts = (shopId) => {
     store.dispatch('emptyCartProducts', { shopId })
   }
+  const showSubmitBtn = computed(() => {
+    const { productList } = cartList[shopId] || {}
+    if (productList) {
+      for (const i in productList) {
+        if (productList[i].checked) {
+          return total.value > 0
+        }
+      }
+    }
+    return false
+  })
   return {
     total,
     price,
@@ -134,7 +150,8 @@ const useCurrentCart = () => {
     changeCartItemChecked,
     handleCartShowChange,
     setCartAllItemsChecked,
-    emptyCartProducts
+    emptyCartProducts,
+    showSubmitBtn
   }
 }
 
@@ -151,7 +168,9 @@ export default {
 <style lang="scss" scoped>
 @import '@/style/viriables.scss';
 @import '@/style/mixins.scss';
-
+a {
+  text-decoration: none;
+}
 .mask {
   position: fixed;
   left: 0;

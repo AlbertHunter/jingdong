@@ -38,6 +38,14 @@ const routes = [
     path: '/profile',
     name: 'Profile',
     component: () => import(/* webpackChunkName: 'profile' */ '@/views/profile/Profile')
+  }, {
+    path: '/orderConfirmation/:id/:addressId?',
+    name: 'OrderConfirmation',
+    component: () => import(/* webpackChunkName: 'order' */ '@/views/orderConfirmation/OrderConfirmation')
+  }, {
+    path: '/orderList',
+    name: 'OrderList',
+    component: () => import(/* webpackChunkName: 'cartList' */ '@/views/orderList/OrderList')
   }
   // {
   //   path: '/about',

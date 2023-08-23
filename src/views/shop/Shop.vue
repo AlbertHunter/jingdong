@@ -14,7 +14,7 @@
         </div>
       </div>
       <ShopInfo :item="data2" :hideBorder = "true" v-show="item.imgUrl"/>
-      <Content />
+      <Content :shopName="item.name" />
       <cart-footer></cart-footer>
     </div>
 </template>

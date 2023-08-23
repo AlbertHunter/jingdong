@@ -44,34 +44,38 @@ export default createStore({
   },
   mutations: {
     changeItemToCart (state, payload) {
-      const { shopId, productId, productInfo, num } = payload
+      const { shopId, productId, productInfo, num, shopName } = payload
       if (typeof state.cartList === 'undefined') state.cartList = {}
-      let shopInfo = {}
+      let shopInfo = {
+        shopName: '',
+        productList: {}
+      }
       if (typeof state.cartList[shopId] !== 'undefined') shopInfo = state.cartList[shopId]
       let product = {}
-      if (typeof shopInfo[productId] === 'undefined') {
+      if (typeof shopInfo.productList[productId] === 'undefined') {
+        shopInfo.shopName = shopName
         product = productInfo
         product.count = 0
-        shopInfo[productId] = product
+        shopInfo.productList[productId] = product
       } else {
-        product = shopInfo[productId]
+        product = shopInfo.productList[productId]
       }
       const count = (product.count + num > 0) ? product.count + num : 0
       if (num > 0) product.checked = true
-      shopInfo[productId].count = count
+      shopInfo.productList[productId].count = count
       state.cartList[shopId] = shopInfo
       setLocalStorage(state)
     },
     changeCartItemChecked (state, payload) {
       const { shopId, productId } = payload
-      const product = state.cartList[shopId][productId]
+      const product = state.cartList[shopId].productList[productId]
       product.checked = !product.checked
-      state.cartList[shopId][productId] = product
+      state.cartList[shopId].productList[productId] = product
       setLocalStorage(state)
     },
     setCartAllItemsChecked (state, payload) {
       const { shopId } = payload
-      const products = Object.values(state.cartList[shopId] || {})
+      const products = Object.values(state.cartList[shopId].productList || {})
       if (products.some((p) => p.checked === false)) {
         products.forEach((p) => {
           p.checked = true
@@ -85,7 +89,7 @@ export default createStore({
     },
     emptyCartProducts (state, payload) {
       const { shopId } = payload
-      state.cartList[shopId] = {}
+      state.cartList[shopId].productList = {}
       setLocalStorage(state)
     }
   },
